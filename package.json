@@ -1,0 +1,29 @@
+{
+  "name": "mineflayer-projectile",
+  "version": "0.0.1",
+  "description": "A solution to determining attributes of projectile trajectory in mineflayer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Camezza/mineflayer-projectile.git"
+  },
+  "keywords": [
+    "minecraft",
+    "AI",
+    "mineflayer",
+    "physics"
+  ],
+  "author": "Firejoust",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Camezza/mineflayer-projectile/issues"
+  },
+  "homepage": "https://github.com/Camezza/mineflayer-projectile#readme",
+  "dependencies": {
+    "vec2": "^1.6.1",
+    "vec3": "^0.1.7"
+  }
+}
