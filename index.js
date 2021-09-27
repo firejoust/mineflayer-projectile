@@ -1,7 +1,7 @@
 const vec2 = require(`vec2`);
 const vec3 = require(`vec3`);
 
- class type {
+class type {
     /**
      * @constructor
      * @param {vec2} velocity - A two-dimensional vector for the initial velocity of a projectile in a certain direction
@@ -38,10 +38,15 @@ const vec3 = require(`vec3`);
         let Sy = this.displacementY(position, destination);
         let initial = chargeDuration ? this.chargeFunc(chargeDuration) : this.velocity;
 
+        // if projectile hits before the velocity reaches zero, then this wont work.
+        // it will end up more than doubling the time it takes which results in an incorrect value (!)
+        // in order to determine time, need to use quadratic formula
+
         if (this.acceleration && this.acceleration.y !== 0) {
             let ascensionSy = -(initial.y ** 2)/(2 * this.acceleration.y);
-            let ascension = -initial.y / this.acceleration.y;
+            let ascension = Math.abs(initial.y / this.acceleration.y);
             let descension = Math.sqrt(Math.abs((2 * (Sy + ascensionSy)) / this.acceleration.y));
+
             return ascension + descension;
         }
 
@@ -84,13 +89,13 @@ class projectile {
         return destination.offset(Sx, Sy, Sz);
     }
 
-    getAngle(type, position, destination, options) {
+    getPitch(type, position, destination, options) {
         let target = this.getTarget(type, position, destination, options);
-        let yaw;
-        let pitch;
+        let angle = { horizontal: null, vertical: null };
 
         if (!type.velocity || !type.acceleration) return {}; 
 
+        let radius = Math.sqrt(type.velocity.x ** 2 + type.velocity.y ** 2); // the maximum value velocity can be
         let Sx = type.displacementX(position, target);
         let Sy = type.displacementY(position, target);
         let Tx = type.timeX(position, target, (options || {}).chargeDuration);
@@ -100,24 +105,26 @@ class projectile {
         let Ux = (Sx - (type.acceleration.x * Ty ** 2) / 2) / Ty;
         let Uy = (Sy - (type.acceleration.y * Tx ** 2) / 2) / Tx;
 
+        console.log(`Radius: ${radius}`);
         console.log(`Sx: ${Sx}`);
         console.log(`Sy: ${Sy}`);
         console.log(`Tx: ${Tx}`);
         console.log(`Ty: ${Ty}`);
         console.log(`Ux: ${Ux} \nUy: ${Uy} \ninitialX: ${type.velocity.x} \ninitialY: ${type.velocity.y}`);
 
+        console.log(`Horizontal: ${Math.atan2(type.velocity.y, Ux)}`);
+        console.log(`Vertical: ${ Math.atan2(Uy, type.velocity.x)}`);
 
-        // these values are influenced by the new initial velocities. They should be equal/below to the original initial velocity in order to be valid
-        console.log(`horizontal angle: ${Math.atan2(type.velocity.y, Ux) * 180/Math.PI}`);
-        console.log(`vertical angle: ${Math.atan2(Uy, type.velocity.x) * 180/Math.PI}`);
+        if (Math.abs(Ux) <= radius && Math.abs(type.velocity.y) <= radius) {
+            angle.horizontal = Math.atan2(type.velocity.y, Ux);
+        }
 
-        /*
-        let horizonal = new vec2(Ux, type.velocity.y);
-        let vertical = new vec2(type.velocity.x, Uy)
+        if (Math.abs(Uy) <= radius && Math.abs(type.velocity.x) <= radius) {
+            angle.vertical = Math.atan2(Uy, type.velocity.x);
+        }
 
-        console.log(horizonal);
-        console.log(vertical);
-        */
+        console.log(angle);
+        return angle;
     }
 
     /**
