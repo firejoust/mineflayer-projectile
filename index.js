@@ -42,12 +42,28 @@ class type {
         // it will end up more than doubling the time it takes which results in an incorrect value (!)
         // in order to determine time, need to use quadratic formula
 
+        // non linear trajectory
         if (this.acceleration && this.acceleration.y !== 0) {
-            let ascensionSy = -(initial.y ** 2)/(2 * this.acceleration.y);
-            let ascension = Math.abs(initial.y / this.acceleration.y);
-            let descension = Math.sqrt(Math.abs((2 * (Sy + ascensionSy)) / this.acceleration.y));
+            // two potential values for time with a parabolic trajectory; use a quadratic variant of newtonian mechanics (t = -u+-√(u^2+2as)/a)
+            let Tyq = [
+            (- initial.y + Math.sqrt(initial.y ** 2 + 2 * this.acceleration.y * Sy))/this.acceleration.y,
+            (- initial.y - Math.sqrt(initial.y ** 2 + 2 * this.acceleration.y * Sy))/this.acceleration.y,
+            ]
 
-            return ascension + descension;
+            let Ty = null;
+
+            for (let T of Tyq) {
+                if (!T) continue; // invalid time; destination not reachable by projectile
+                if ((!Ty && T >= 0) || (Ty && T <= Ty)) Ty = T; // only positive time values are valid; determine the fastest time (closer horizontally)
+            }
+
+            /*
+            let Sya = -(initial.y ** 2)/(2 * this.acceleration.y);
+            let ascension = Math.abs(initial.y / this.acceleration.y);
+            let descension = Math.sqrt(Math.abs((2 * (Sy + Sya)) / this.acceleration.y));
+            */
+            return Ty;
+
         }
 
         return Sy/initial.y;
@@ -94,14 +110,15 @@ class projectile {
         let angle = { horizontal: null, vertical: null };
 
         if (!type.velocity || !type.acceleration) return {}; 
-
+        // maximum velocity that can be achieved through shifting angles
         let radius = Math.sqrt(type.velocity.x ** 2 + type.velocity.y ** 2); // the maximum value velocity can be
+        // horizontal and vertical displacement of target
         let Sx = type.displacementX(position, target);
         let Sy = type.displacementY(position, target);
+        // how long it takes to reach the target horizontally and vertically
         let Tx = type.timeX(position, target, (options || {}).chargeDuration);
         let Ty = type.timeY(position, target, (options || {}).chargeDuration);
-
-        // these values below are correct.
+        // shifted initial velocity values required to intercept the horizontal and vertical components at the same time
         let Ux = (Sx - (type.acceleration.x * Ty ** 2) / 2) / Ty;
         let Uy = (Sy - (type.acceleration.y * Tx ** 2) / 2) / Tx;
 
@@ -115,6 +132,7 @@ class projectile {
         console.log(`Horizontal: ${Math.atan2(type.velocity.y, Ux)}`);
         console.log(`Vertical: ${ Math.atan2(Uy, type.velocity.x)}`);
 
+        // determine if the new velocity is achievable 
         if (Math.abs(Ux) <= radius && Math.abs(type.velocity.y) <= radius) {
             angle.horizontal = Math.atan2(type.velocity.y, Ux);
         }
