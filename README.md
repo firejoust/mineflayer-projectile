@@ -50,7 +50,7 @@ async function shoot(target) {
   // allow enough time to charge the bow (10 ticks)
   await delay(950);
   let angle = bot.projectile.getAngle(bot.projectile.types.bow, bot.entity.position, target.position);
-  bot.look(angle.horizontal.yaw, angle.horizontal.pitch);
+  bot.look(angle.horizontal.x, angle.horizontal.y);
   
   // server needs a tick to process head rotation
   await delay(50);
