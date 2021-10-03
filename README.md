@@ -57,3 +57,34 @@ async function shoot(target) {
   bot.deactivateItem();
 }
 ```
+
+### API
+```javascript
+// types
+vec2 (https://www.npmjs.com/package/vec2)
+vec3 (https://www.npmjs.com/package/vec3)
+
+/*
+Defines a new projectile type, which can then be used in other functions.
+- velocity (vec2, optional) - The initial horizontal & vertical velocity of the projectile (blocks per tick). Can be left out for instantaneous velocity.
+- gravity (integer, optional) - A single dimensional vector for the value of gravity (blocks per tick). Can be left out for a linear trajectory.
+- chargeFunc (function, optional) - A function accepting how long a projectile has been charged for (ticks), returning a vec2 value defining the subsequent initial velocity.
+*/
+bot.projectile.type(velocity, gravity, chargeFunc)
+
+/*
+References a pre-defined projectile type.
+- "type" can be replaced with "bow", "crossbow", "potion", "expbottle", "throwable" (eggs, snowballs, pearls) or "firework" (fireworks shot from a crossbow).
+*/
+bot.projectile.types.type
+
+/*
+Gets the vertical and horizontal angle required to land at the specified destination.
+- type (bot.projectile.type) - The projectile which is being fired
+- position (vec3) - Where the projectile is being fired
+- destination (vec3) - Where the projectile will land
+- targetOptions (object, optional) - Settings that should be accounted for whilst determining a target.
+*/
+bot.projectile.getAngle(type, position, destination, targetOptions)
+
+```
