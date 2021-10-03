@@ -11,3 +11,9 @@
 - Determine the optimal angle for a projectile with a high level physical basis
 - Predict the movement of a target in 3D space using modernised classical mechanics
 - (WIP) Detect parabolic & linear projectile collision with entities and blocks
+
+### Installation
+- This package can be installed with `npm`:
+```bash
+npm i mineflayer-projectile
+```
