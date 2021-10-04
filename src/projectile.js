@@ -12,8 +12,8 @@ class projectile {
      * Determines a position's translation after a certain number of ticks
      * @param {vec3} position - The current position of the target
      * @param {vec3?} velocity - How fast the target is moving (blocks per tick)
-     * @param {vec3?} acceleration - How fast the velocity is increasing (blocks per square tick)
-     * @param {number?} latency - How long the target is moving for (in ticks)
+     * @param {vec3?} acceleration - How fast the target's velocity is increasing (blocks per tick squared)
+     * @param {number?} latency - How long the target has been moving for (in ticks)
      * @returns {vec3} The updated position
      */
     getTarget(position, velocity, acceleration, latency) {
@@ -35,7 +35,7 @@ class projectile {
      * @param {vec3} position - Where the projectile is being fired
      * @param {vec3} destination - Where the projectile needs to hit
      * @param {number?} chargeTicks - (Optional) how long the projectile has been charging for (in ticks)
-     * @returns {vec2} - A vec2 object. The x property is the required yaw, and the y property is the required pitch
+     * @returns {vec2} - The x property is the required yaw, and the y property is the required pitch
      */
     getAngle(type, position, destination, chargeTicks) {
         // find the initial angle(s) required to land without variable modification
