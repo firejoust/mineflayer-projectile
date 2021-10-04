@@ -22,14 +22,9 @@ class type {
         return Math.asin(-(position.distanceTo(destination) * this.gravity)/(2 * this.chargeFunc(chargeTicks).lengthSquared()));
     }
 
-    timeParabolic(angle, chargeTicks) {
+    time(position, destination, chargeTicks) {
         if (!this.velocity) return 0;
-        return -(2 * Math.sin(angle) * this.chargeFunc(chargeTicks).length())/(this.gravity);
-    }
-
-    timeLinear(distance, chargeTicks) {
-        if (!this.velocity) return 0;
-        return distance/this.chargeFunc(chargeTicks).length();
+        return position.distanceTo(destination)/this.chargeFunc(chargeTicks).length();
     }
 }
 

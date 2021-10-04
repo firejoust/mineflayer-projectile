@@ -3,8 +3,7 @@
   "version": "0.0.1",
   "description": "Effectively determine the trajectory & angle of projectiles in mineflayer with Newtonian mechanics",
   "main": "index.js",
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Camezza/mineflayer-projectile.git"
