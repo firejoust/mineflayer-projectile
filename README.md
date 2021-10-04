@@ -50,7 +50,7 @@ async function shoot(target) {
   // allow enough time to charge the bow (10 ticks)
   await delay(950);
   let angle = bot.projectile.getAngle(bot.projectile.types.bow, bot.entity.position, target.position);
-  bot.look(angle.horizontal.x, angle.horizontal.y);
+  bot.look(angle.x, angle.y);
   
   // server needs a tick to process head rotation
   await delay(50);
@@ -79,12 +79,22 @@ References a pre-defined projectile type.
 bot.projectile.types.type
 
 /*
-Gets the vertical and horizontal angle required to land at the specified destination.
-- type (bot.projectile.type) - The projectile which is being fired
+Determines the suitable yaw & pitch to hit a target with a projectile
+- type (type) - Which projectile is being used
 - position (vec3) - Where the projectile is being fired
-- destination (vec3) - Where the projectile will land
-- targetOptions (object, optional) - Settings that should be accounted for whilst determining a target.
+- destination (vec3) - Where the projectile needs to hit
+- chargeTicks (vec3, optional) - how long the projectile has been charging for (in ticks)
+- Returns a vec2 object. The x property is the required yaw, and the y property is the required pitch
 */
 bot.projectile.getAngle(type, position, destination, targetOptions)
 
+/*
+Determines a position's translation after a certain number of ticks
+- position (vec3) - The current position of the target
+- velocity (vec3, optional) - How fast the target is moving (blocks per tick)
+- acceleration (vec3, optional) - How fast the target's velocity is increasing (blocks per tick squared)
+- latency (number, optional) - How long the target has been moving for (in ticks)
+- Returns a vec3 object containing the updated position
+*/
+bot.projectile.getTarget(position, velocity, acceleration, latency)
 ```

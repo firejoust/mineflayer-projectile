@@ -19,17 +19,14 @@ class type {
 
     launchAngle(position, destination, chargeTicks) {
         if (!this.velocity) return 0;
-        return Math.asin(-(position.distanceTo(destination) * this.gravity)/(2 * this.chargeFunc(chargeTicks).lengthSquared()));
+        let velocity = chargeTicks ? this.chargeFunc(chargeTicks).lengthSquared() : this.velocity.lengthSquared();
+        return Math.asin(-(position.distanceTo(destination) * this.gravity)/(2 * velocity));
     }
 
-    timeParabolic(angle, chargeTicks) {
+    time(position, destination, chargeTicks) {
         if (!this.velocity) return 0;
-        return -(2 * Math.sin(angle) * this.chargeFunc(chargeTicks).length())/(this.gravity);
-    }
-
-    timeLinear(distance, chargeTicks) {
-        if (!this.velocity) return 0;
-        return distance/this.chargeFunc(chargeTicks).length();
+        let velocity = chargeTicks ? this.chargeFunc(chargeTicks).length : this.velocity.length;
+        return position.distanceTo(destination)/velocity;
     }
 }
 
