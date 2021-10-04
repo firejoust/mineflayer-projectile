@@ -74,7 +74,7 @@ bot.projectile.type(velocity, gravity, chargeFunc)
 
 /*
 References a pre-defined projectile type.
-- "type" can be replaced with "bow", "crossbow", "potion", "expbottle", "throwable" (eggs, snowballs, pearls) or "firework" (fireworks shot from a crossbow).
+- "type" can be replaced with "bow", "crossbow", "potion", "expbottle", "trident", "throwable" (eggs, snowballs, pearls) or "firework" (fireworks shot from a crossbow).
 */
 bot.projectile.types.type
 
