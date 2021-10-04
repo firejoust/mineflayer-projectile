@@ -19,12 +19,14 @@ class type {
 
     launchAngle(position, destination, chargeTicks) {
         if (!this.velocity) return 0;
-        return Math.asin(-(position.distanceTo(destination) * this.gravity)/(2 * this.chargeFunc(chargeTicks).lengthSquared()));
+        let velocity = chargeTicks ? this.chargeFunc(chargeTicks).lengthSquared() : this.velocity.lengthSquared();
+        return Math.asin(-(position.distanceTo(destination) * this.gravity)/(2 * velocity));
     }
 
     time(position, destination, chargeTicks) {
         if (!this.velocity) return 0;
-        return position.distanceTo(destination)/this.chargeFunc(chargeTicks).length();
+        let velocity = chargeTicks ? this.chargeFunc(chargeTicks).length : this.velocity.length;
+        return position.distanceTo(destination)/velocity;
     }
 }
 

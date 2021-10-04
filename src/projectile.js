@@ -43,11 +43,9 @@ class projectile {
         let offset = type.launchAngle(position, destination, chargeTicks);
 
         // find the required angles to actually hit the target
-        let yaw = Math.atan2(target.x - position.x, target.z - position.z);
+        let yaw = Math.atan2(position.x - destination.x, position.z - destination.z);
         let pitch = Math.atan2(destination.y - position.y, Math.sqrt((destination.x - position.x) ** 2 + (destination.z - position.z) ** 2));
-
-        // maybe yaw can simply be reverse by using position - target instead of target - position.
-        return new vec2(yaw + Math.PI, (pitch + offset) - initial);
+        return new vec2(yaw, (pitch + offset) - initial);
     }
 }
 
