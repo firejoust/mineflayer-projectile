@@ -49,7 +49,16 @@ class projectile {
         return new vec2(yaw, (pitch + offset) - initial);
     }
 
+    /**
+     * Determines a projectile's interception coordinates with blocks
+     * @param {type} type - Which projectile is being used
+     * @param {vec3} position - Where the projectile is being fired
+     * @param {vec3} destination - Where the projectile needs to hit
+     * @param {number?} chargeTicks - (Optional) how long the projectile has been charging for (in ticks)
+     * @returns {vec3[]} - An array of 3D coordinates
+     */
     getCollision(type, position, destination, chargeTicks) {
+        let collisions = [];
         let time = type.time(position, destination, chargeTicks);
         let angle = this.getAngle(type, position, destination, chargeTicks);
 
@@ -59,9 +68,8 @@ class projectile {
         let Uy = U * Math.sin(angle.y);
         let Uz = U * Math.cos(angle.x + Math.PI);
 
-        let collisions = [];
+        // find where the projectile intercepts with blocks between ticks
         let verifyCollision = (x, y, z, line) => {
-
             let offset = position.offset(x, y, z).floored();
             let block = this.bot.blockAt(offset);
 
@@ -70,6 +78,7 @@ class projectile {
                 let shapes = [];
 
                 for (let shape of block.shapes) {
+                    // find the absolute position of the block vertices
                     shapes.push([shape[0] + offset.x, shape[1] + offset.y, shape[2] + offset.z, shape[3] + offset.x, shape[4] + offset.y, shape[5] + offset.z]);
                 }
 
@@ -77,6 +86,7 @@ class projectile {
             }
         }
 
+        // use the velocity applied every tick to determine where the projectile will travel
         for (let tick = 1, max = Math.ceil(time); tick <= max; tick++) {
             // s=ut+(1/2)at^2
             let p0 = new vec3((Ux * (tick - 1)), (Uy * (tick - 1) + (1/2) * type.gravity * (tick - 1) ** 2), (Uz * (tick - 1)));
@@ -85,7 +95,6 @@ class projectile {
             let path = line3.fromVec3(position.plus(p0), position.plus(p1));
 
             // determine all blocks between start-tick and end-tick coordinates
-
             // x axis iteration
             let x = p0.x;
             let sx = pd.x === 0 ? 1 : Math.sign(pd.x);
@@ -104,8 +113,8 @@ class projectile {
                     y += sy;
                 }
                 x += sx;
-            }
-        }
+            }}
+
         return collisions;
     }
 }
