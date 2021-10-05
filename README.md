@@ -83,7 +83,7 @@ Determines the suitable yaw & pitch to hit a target with a projectile
 - type (type) - Which projectile is being used
 - position (vec3) - Where the projectile is being fired
 - destination (vec3) - Where the projectile needs to hit
-- chargeTicks (vec3, optional) - how long the projectile has been charging for (in ticks)
+- chargeTicks (number, optional) - how long the projectile has been charging for (in ticks)
 - Returns a vec2 object. The x property is the required yaw, and the y property is the required pitch
 */
 bot.projectile.getAngle(type, position, destination, targetOptions)
@@ -97,4 +97,14 @@ Determines a position's translation after a certain number of ticks
 - Returns a vec3 object containing the updated position
 */
 bot.projectile.getTarget(position, velocity, acceleration, latency)
+
+/*
+Determines a projectile's interception coordinates with blocks
+- type (type) - Which projectile is being used
+- position (vec3) - Where the projectile is being fired
+- destination (vec3) - Where the projectile needs to hit
+- chargeTicks (number, optional) how long the projectile has been charging for (in ticks)
+Returns an array of 3D coordinates
+*/
+bot.projectile.getCollision(type, position, destination, targetOptions)
 ```
