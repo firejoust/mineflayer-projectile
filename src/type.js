@@ -25,7 +25,7 @@ class type {
 
     time(position, destination, chargeTicks) {
         if (!this.velocity) return 0;
-        let velocity = chargeTicks ? this.chargeFunc(chargeTicks).length : this.velocity.length;
+        let velocity = chargeTicks ? this.chargeFunc(chargeTicks).length() : this.velocity.length();
         return position.distanceTo(destination)/velocity;
     }
 }
