@@ -96,24 +96,25 @@ class projectile {
 
             // determine all blocks between start-tick and end-tick coordinates
             // x axis iteration
-            let x = p0.x;
-            let sx = pd.x === 0 ? 1 : Math.sign(pd.x);
-            while (sx > 0 && x < p1.x || sx < 0 && x > p1.x) {
-                // y axis iteration
-                let y = p0.y;
-                let sy = pd.y === 0 ? 1 : Math.sign(pd.y);
-                while (sy > 0 && y < p1.y || sy < 0 && y > p1.y) {
-                    // z axis iteration
-                    let z = p0.z;
-                    let sz = pd.z === 0 ? 1 : Math.sign(pd.z);
-                    while (sz > 0 && z < p1.z || sz < 0 && z > p1.z) {
-                        verifyCollision(x, y, z, path);
-                        z += sz;
-                    }
-                    y += sy;
-                }
-                x += sx;
-            }}
+            for (
+                let x = p0.x, sx = pd.x === 0 ? 1 : Math.sign(pd.x); // detemine the start & end of traversed block range
+                (sx > 0 && x < p1.x || sx < 0 && x > p1.x); // execute until all points have been fulfilled
+                (x += sx) // either increment or decrement based on range difference
+            ) 
+            // y axis iteration
+            for (
+                let y = p0.y, sy = pd.y === 0 ? 1 : Math.sign(pd.y);
+                (sy > 0 && y < p1.y || sy < 0 && y > p1.y);
+                (y += sy)
+            ) 
+            // z axis iteration
+            for (
+                let z = p0.z, sz = pd.z === 0 ? 1 : Math.sign(pd.z);
+                (sz > 0 && z < p1.z || sz < 0 && z > p1.z);
+                (z += sz)
+            )
+            verifyCollision(x, y, z, path);
+        }
 
         return collisions;
     }
