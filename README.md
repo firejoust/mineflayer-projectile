@@ -1,70 +1,72 @@
 <div align="center">
   <h1>Mineflayer-projectile</h1>
-  <img src="https://img.shields.io/github/issues/Camezza/mineflayer-projectile?style=for-the-badge">
-  <img src="https://img.shields.io/github/stars/Camezza/mineflayer-projectile?style=for-the-badge">
-  <img src="https://img.shields.io/github/license/Camezza/mineflayer-projectile?style=for-the-badge">
+  <img src="https://img.shields.io/npm/v/mineflayer-projectile?style=flat-square">
+  <img src="https://img.shields.io/github/license/firejoust/mineflayer-projectile?style=flat-square">
+  <img src="https://img.shields.io/github/issues/firejoust/mineflayer-projectile?style=flat-square">
+  <img src="https://img.shields.io/github/issues-pr/firejoust/mineflayer-projectile?style=flat-square">
   <p><i>Effectively determine the trajectory & angle of projectiles in mineflayer with Newtonian mechanics</i></p>
   <img src="preview.gif">
 </div>
 
 ### Features
 - Determine the optimal angle for a projectile with a high level physical basis
-- Predict the movement of a target in 3D space using modernised classical mechanics
+- Predict the movement of a target in 3D space using classical mechanics
 - Detect parabolic & linear projectile collision with blocks
 
 ### Installation
 - This package can be installed with `npm`:
 ```bash
-npm i mineflayer-projectile
+npm install mineflayer-projectile
 ```
 
 ### API
 ```javascript
 // types
-vec2 (https://www.npmjs.com/package/vec2)
-vec3 (https://www.npmjs.com/package/vec3)
+Vec2 (https://www.npmjs.com/package/vec2)
+Vec3 (https://www.npmjs.com/package/vec3)
 
 /*
-Defines a new projectile type, which can then be used in other functions.
-- velocity (vec2, optional) - The initial horizontal & vertical velocity of the projectile (blocks per tick). Can be left out for instantaneous velocity.
-- gravity (integer, optional) - A single dimensional vector for the value of gravity (blocks per tick). Can be left out for a linear trajectory.
-- chargeFunc (function, optional) - A function accepting how long a projectile has been charged for (ticks), returning a vec2 value defining the subsequent initial velocity.
+A pre-defined projectile type that is used in calculation
+- "type" can be "bow", "crossbow", "potion", "expbottle", "trident", "throwable" (eggs, snowballs, pearls) or "firework" (fireworks shot from a crossbow)
+*/
+bot.projectile.types["type"]
+
+/*
+Initialises a projectile type that is used in calculation
+- velocity (Vec2, optional) - The initial velocity, will assume infinite if unspecified
+- gravity (Number, optional) - The gravity, will assume 0 if unspecified
+- chargeFunc (Void, optional) - A function with a parameter for ticks (Number) returning initial velocity (Vec2) used for charged projectiles
+- Returns: Projectile
 */
 bot.projectile.type(velocity, gravity, chargeFunc)
 
 /*
-References a pre-defined projectile type.
-- "type" can be replaced with "bow", "crossbow", "potion", "expbottle", "trident", "throwable" (eggs, snowballs, pearls) or "firework" (fireworks shot from a crossbow).
-*/
-bot.projectile.types.type
-
-/*
-Determines the suitable yaw & pitch to hit a target with a projectile
-- type (type) - Which projectile is being used
-- position (vec3) - Where the projectile is being fired
-- destination (vec3) - Where the projectile needs to hit
-- chargeTicks (number, optional) - how long the projectile has been charging for (in ticks)
-- Returns a vec2 object. The x property is the required yaw, and the y property is the required pitch
+Returns the yaw (x) and pitch (y) required to hit a target
+- type (Projectile) - Projectile used for calculation
+- position (Vec3) - Where the projectile is being fired
+- destination (Vec3) - Where the projectile is landing
+- chargeTicks (Number, optional) - How long the projectile has been charging for (in ticks)
+- Returns: Vec2
 */
 bot.projectile.getAngle(type, position, destination, chargeTicks)
 
 /*
-Determines a projectile's interception coordinates with blocks
-- type (type) - Which projectile is being used
-- position (vec3) - Where the projectile is being fired
-- destination (vec3) - Where the projectile needs to hit
-- chargeTicks (number, optional) how long the projectile has been charging for (in ticks)
-Returns an array of 3D coordinates
+Returns where the projectile will intersect with a block
+- type (Projectile) - Projectile used for calculation
+- position (Vec3) - Where the projectile is being fired
+- destination (Vec3) - Where the projectile is landing
+- chargeTicks (Number, optional) How long the projectile has been charging for (in ticks)
+- Returns: Vec3[]
 */
 bot.projectile.getCollision(type, position, destination, chargeTicks)
 
 /*
-Determines a position's translation after a certain number of ticks
-- position (vec3) - The current position of the target
-- velocity (vec3, optional) - How fast the target is moving (blocks per tick)
-- acceleration (vec3, optional) - How fast the target's velocity is increasing (blocks per tick squared)
-- latency (number, optional) - How long the target has been moving for (in ticks)
-- Returns a vec3 object containing the updated position
+Returns a position's translation after a period of time
+- position (Vec3) - Where the projectile is being fired (target)
+- velocity (Vec3, optional) - How fast the target is moving
+- acceleration (Vec3, optional) - How fast the target's movement is changing
+- latency (Number, optional) - How long the target will move for (in ticks)
+- Returns: Vec3
 */
 bot.projectile.getTarget(position, velocity, acceleration, latency)
 ```
