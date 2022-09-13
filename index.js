@@ -1,11 +1,11 @@
-const projectile = require(`./src/projectile`);
-const type = require(`./src/type`);
-const constants = require(`./src/constants`);
+const Plugin = require("./lib/plugin");
+const Projectile = require("./lib/projectile");
+const Constants = require("./lib/constants");
 
 function inject(bot) {
-    bot.projectile = new projectile(bot);
-    bot.projectile.type = type;
-    bot.projectile.types = constants;
+    bot.projectile = new Plugin(bot);
+    bot.projectile.type = Projectile;
+    bot.projectile.types = Constants;
 }
 
 module.exports = inject;

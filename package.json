@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/firejoust/mineflayer-projectile#readme",
   "dependencies": {
-    "line3": "^0.0.5",
+    "line3": "^0.0.8",
     "vec2": "^1.6.1",
     "vec3": "^0.1.7"
   }
