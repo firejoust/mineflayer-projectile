@@ -1,30 +1,32 @@
 <div align="center">
   <h1>Mineflayer-projectile</h1>
+  <p>Determine the trajectory & angle of projectiles in mineflayer using Newtonian mechanics</p>
   <img src="https://img.shields.io/npm/v/mineflayer-projectile?style=flat-square">
   <img src="https://img.shields.io/github/license/firejoust/mineflayer-projectile?style=flat-square">
   <img src="https://img.shields.io/github/issues/firejoust/mineflayer-projectile?style=flat-square">
   <img src="https://img.shields.io/github/issues-pr/firejoust/mineflayer-projectile?style=flat-square">
-  <p><i>Effectively determine the trajectory & angle of projectiles in mineflayer with Newtonian mechanics</i></p>
   <img src="preview.gif">
 </div>
 
-### Features
+#### Functionality
 - Determine the optimal angle for a projectile with a high level physical basis
 - Predict the movement of a target in 3D space using classical mechanics
 - Detect parabolic & linear projectile collision with blocks
 
-### Installation
-- This package can be installed with `npm`:
+#### Installation
+- Execute the following in your NPM project directory:
 ```bash
 npm install mineflayer-projectile
 ```
 
-### API
-```javascript
-// types
-Vec2 (https://www.npmjs.com/package/vec2)
-Vec3 (https://www.npmjs.com/package/vec3)
-
+#### API
+##### Class definition
+```js
+class Vec2; // (https://www.npmjs.com/package/vec2)
+class Vec3; // (https://www.npmjs.com/package/vec3)
+```
+##### Methods & Constants
+```js
 /*
 A pre-defined projectile type that is used in calculation
 - "type" can be "bow", "crossbow", "potion", "expbottle", "trident", "throwable" (eggs, snowballs, pearls) or "firework" (fireworks shot from a crossbow)
@@ -71,58 +73,44 @@ Returns a position's translation after a period of time
 bot.projectile.getTarget(position, velocity, acceleration, latency)
 ```
 
-### Example
-```javascript
-/*
-**  A simple example of how a mineflayer bot can act as a turret (assuming a bow is actively being held)
-**  - Utilises the bot.projectile.getAngle function to determine an angle required to hit a target
-**  - References bot.projectile.types.bow to specify that the trajectory should be calculated for an arrow
-*/
+#### Simple Example
+```js
+const mineflayer = require(`mineflayer`)
+const projectile = require(`mineflayer-projectile`)
+const bot = mineflayer.createBot()
+bot.loadPlugin(projectile)
 
-const mineflayer = require(`mineflayer`);
-const projectile = require(`mineflayer-projectile`);
-const bot = mineflayer.createBot({}); // etc.
-bot.loadPlugin(projectile);
+let attack = false
+let occupied = false
 
-// global variables
-let attack = false;
-let occupied = false;
-
-// global functions
-const delay = async ms => {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-const shoot = async target => {
-  bot.activateItem();
-  // wait 10 ticks to charge a bow (1 tick is 50 milliseconds)
-  await delay(1000);
-  // lock onto the target's position
-  let angle = bot.projectile.getAngle(bot.projectile.types.bow, bot.entity.position, target.position);
-  await bot.look(angle.x, angle.y);
-  // release bow
-  bot.deactivateItem();
+async function shoot(target) {
+  // draw bow
+  bot.activateItem()
+  await new Promise(resolve => setTimeout(resolve, 1000))
+  // lock on
+  let angle = bot.projectile.getAngle(bot.projectile.types.bow, bot.entity.position, target.position)
+  await bot.look(angle.x, angle.y)
+  // release
+  bot.deactivateItem()
 }
 
-// listeners
 bot.on("message", json => {
-  let message = json.toString();
-  // the message "$attack" has been sent in the chat
+  let message = json.toString()
   if (message.includes("$attack")) {
-    attack = !attack;
-    bot.chat(attack ? "Now autonomously firing towards the closest enemy!" : "Ceasing all operation!");
+    attack = !attack
+    bot.chat(attack ? "Now autonomously firing towards the closest enemy!" : "Ceasing all operation!")
   }
-});
+})
 
 bot.on("physicsTick", async () => {
-  // wait for existing operations to finish
   if (attack && !occupied) {
-    occupied = true;
-    // determine an enemy to target (players only)
-    let target = bot.nearestEntity(entity => entity.username);
+    let target = bot.nearestEntity(entity => entity.username)
+    
+    occupied = true
     if (target) {
-      await shoot(target);
+      await shoot(target)
     }
-    occupied = false;
+    occupied = false
   }
 });
 ```
