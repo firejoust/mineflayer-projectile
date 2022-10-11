@@ -1,6 +1,6 @@
 {
   "name": "mineflayer-projectile",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "Effectively determine the trajectory & angle of projectiles in mineflayer with Newtonian mechanics",
   "main": "index.js",
   "scripts": {},
